@@ -1,0 +1,112 @@
+/* Import Font Montserrat */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+/* Background halaman */
+body {
+    background: #d7e9d5 !important;
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;   /* FONT TERAPLIKASI */
+}
+
+/* Sidebar */
+.sidebar {
+    background: #2e7d60;
+    min-height: 100vh;
+    height: 100%;
+    color: white;
+    padding: 30px;
+    border-radius: 0 !important;
+    font-family: 'Montserrat', sans-serif;   /* Pastikan sidebar Montserrat */
+}
+
+.sidebar h3 {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 35px;
+}
+
+/* Variabel warna */
+:root {
+    --sidebar-bg: #2e7d60;
+    --sidebar-hover: #1a6449;
+    --sidebar-active: #14533b;
+    --sidebar-border: #0f3f2c;
+}
+
+/* Item sidebar */
+.sidebar ul li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 15px;
+    border-left: 4px solid transparent;
+    border-radius: 6px;
+    transition: 0.25s ease;
+    cursor: pointer;                /* Tambahan */
+}
+
+/* Hover efek */
+.sidebar ul li:hover {
+    background: var(--sidebar-hover);
+    border-left: 4px solid var(--sidebar-border);
+    opacity: 1;
+
+    /* Tambahan efek mewah */
+    transform: translateX(3px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Active */
+.sidebar ul li.active {
+    background: var(--sidebar-active);
+    border-left: 4px solid var(--sidebar-border);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+}
+
+/* Link di sidebar */
+.sidebar a {
+    color: white;
+    text-decoration: none;
+}
+
+/* Container isi konten */
+.content-box {
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow:
+        0px 2px 3px rgba(0, 0, 0, 0.02),
+        0px 4px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* Card tabel */
+.card-figma {
+    background: #fff;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow:
+        0px 2px 3px rgba(0,0,0,0.02),
+        0px 4px 8px rgba(0,0,0,0.04);
+}
+
+/* Tabel */
+.table-figma th {
+    font-weight: 600;
+    font-size: 16px;
+    background: #f8f9fa;
+}
+
+.table-figma td {
+    padding-top: 13px !important;
+    padding-bottom: 13px !important;
+    font-size: 15px;
+}
+
+/* Emoji icons */
+.emoji {
+    font-size: 18px;
+    margin-right: 8px;
+    position: relative;
+    top: 2px;
+}
