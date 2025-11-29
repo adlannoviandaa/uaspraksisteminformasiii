@@ -12,11 +12,12 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('mahasiswa_id');
             $table->unsignedBigInteger('dosen_id');
+            $table->string('status')->default('pending');
             $table->timestamps();
 
             // Foreign key optional
-            // $table->foreign('mahasiswa_id')->references('id')->on('users')->onDelete('cascade');
-            // $table->foreign('dosen_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('mahasiswa_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('dosen_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

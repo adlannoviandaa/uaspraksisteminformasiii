@@ -3,22 +3,25 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class PilihanDosen extends Model
 {
-    protected $table = 'pilihan_dosen'; // <-- Tambahkan ini
+    protected $table = 'pilihan_dosen';
 
     protected $fillable = [
         'mahasiswa_id',
-        'dosen1_id',
+        'dosen_id',
         'status'
     ];
 
-    public function dosen1()
+    // Relasi ke dosen
+    public function dosen()
     {
-        return $this->belongsTo(User::class, 'dosen1_id');
+        return $this->belongsTo(User::class, 'dosen_id');
     }
 
+    // Relasi ke mahasiswa
     public function mahasiswa()
     {
         return $this->belongsTo(User::class, 'mahasiswa_id');

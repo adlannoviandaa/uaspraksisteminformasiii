@@ -102,7 +102,7 @@
             <div class="card-custom">
 
                 <div class="d-flex justify-content-end mb-3">
-                    <a href="{{ route('mahasiswa.tugasakhir.create') }}" class="btn btn-primary">
+                    <a href="{{ route('mahasiswa.tugasakhir.index') }}" class="btn btn-primary">
                         + Tambah Tugas Akhir
                     </a>
                 </div>
@@ -139,12 +139,12 @@
                             <td>
                                 <div class="action-container">
 
-                                    <a href="{{ route('mahasiswa.tugasakhir.edit', $item->id) }}"
+                                    <a href="{{ route('mahasiswa.tugasakhir.index', $item->id) }}"
                                        class="btn-action edit">
                                         <i class="bi bi-pencil-square"></i> Edit
                                     </a>
 
-                                    <form action="{{ route('mahasiswa.tugasakhir.destroy', $item->id) }}"
+                                    <form action="{{ route('mahasiswa.tugasakhir.index', $item->id) }}"
                                           method="POST"
                                           onsubmit="return confirm('Hapus tugas akhir ini?')">
                                         @csrf

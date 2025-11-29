@@ -1,73 +1,23 @@
-<style>
-    .sidebar {
-        width: 260px;
-        min-height: 100vh;
-        background: #1f6f52;
-        color: white;
-        padding: 30px 20px;
-    }
+{{-- resources/views/components/sidebar2.blade.php --}}
 
-    .sidebar h3 {
-        font-size: 22px;
-        font-weight: 700;
-        margin-bottom: 30px;
-    }
+<div class="w-64 bg-green-700 text-white flex flex-col p-6">
 
-    .sidebar a {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 12px 15px;
-        color: white;
-        text-decoration: none;
-        border-radius: 8px;
-        font-size: 15px;
-    }
+    <h1 class="text-3xl font-bold mb-10">Dashboard</h1>
 
-    .sidebar a:hover,
-    .sidebar a.active {
-        background: #15593f;
-        font-weight: bold;
-    }
-</style>
+    <a href="#" class="flex items-center gap-3 text-lg mb-6">
+        <span>🏠</span> Beranda
+    </a>
 
-<div class="sidebar">
-    <h3>SITAMA</h3>
-    <ul style="padding:0; margin:0; list-style:none;">
+    <a href="#" class="flex items-center gap-3 text-lg mb-6">
+        <span>📄</span> Tugas Akhir
+    </a>
 
-        <li>
-            <a href="{{ route('mahasiswa.dashboard') }}"
-                class="{{ request()->routeIs('mahasiswa.dashboard') ? 'active' : '' }}">
-                🏠 Beranda
-            </a>
-        </li>
+    <a href="#" class="flex items-center gap-3 text-lg mb-6">
+        <span>✉️</span> Pesan
+    </a>
 
-        <li>
-            <a href="{{ route('mahasiswa.tugasakhir.index') }}"
-                class="{{ request()->routeIs('mahasiswa.tugasakhir.*') ? 'active' : '' }}">
-                📄 Tugas Akhir
-            </a>
-        </li>
+    <a href="/admin/pengaturan" class="flex items-center gap-3 text-lg mb-6">
+        <span>⚙️</span> Pengaturan
+    </a>
 
-        <li>
-            <a href="{{ route('mahasiswa.pilihandosen.index') }}"
-                class="{{ request()->routeIs('mahasiswa.pilihandosen.*') ? 'active' : '' }}">
-                👨‍🏫 Pilihan Dosen
-            </a>
-        </li>
-
-        <li>
-            <a href="{{ route('mahasiswa.pesan.index') }}"
-                class="{{ request()->routeIs('mahasiswa.pesan.*') ? 'active' : '' }}">
-                💬 Pesan
-            </a>
-        </li>
-
-        <li>
-            <a href="{{ route('mahasiswa.pengaturan.index') }}"
-                class="{{ request()->routeIs('mahasiswa.pengaturan') ? 'active' : '' }}">
-                ⚙️ Pengaturan
-            </a>
-        </li>
-    </ul>
 </div>

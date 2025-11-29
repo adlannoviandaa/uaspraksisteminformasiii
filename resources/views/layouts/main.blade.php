@@ -3,52 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ $title ?? "Dashboard Mahasiswa" }} - SITAMA</title>
 
-    <title>@yield('title', 'SITAMA')</title>
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
 
     <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
 
-    <!-- Tailwind -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- GLOBAL FONT -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Custom CSS -->
     <style>
         body {
-            background: #f3f3f3;
             font-family: 'Montserrat', sans-serif;
         }
 
-        .content-wrapper {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            min-height: 100vh;
+        .sidebar {
+            width: 230px;
+            height: 100vh;
+            background: #136f43;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 25px 20px;
+        }
+
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            margin: 12px 0;
+            font-size: 16px;
+        }
+
+        .sidebar a:hover {
+            font-weight: bold;
+        }
+
+        .content {
+            margin-left: 250px;
+            padding: 30px;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="d-flex">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h3 class="fw-bold mb-4">SITAMA</h3>
 
-        {{-- SIDEBAR --}}
-        @include('layouts.sidebar')
+        <a href="/mahasiswa/dashboard">📊 Beranda</a>
+        <a href="/mahasiswa/tugasakhir">📄 Tugas Akhir</a>
+        <a href="/mahasiswa/pesan">✉️ Pesan</a>
+        <a href="/mahasiswa/pengaturan">⚙️ Pengaturan</a>
 
-        {{-- MAIN CONTENT --}}
-        <main class="flex-grow-1 p-4">
-            <div class="content-wrapper">
-                @yield('content')
-            </div>
-        </main>
+        <hr class="mt-3 mb-2 text-white">
 
+        <form action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button class="btn btn-light w-100 mt-2">🚪 Logout</button>
+        </form>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Main Content -->
+    <div class="content">
+        @yield('content')
+    </div>
 
 </body>
 </html>

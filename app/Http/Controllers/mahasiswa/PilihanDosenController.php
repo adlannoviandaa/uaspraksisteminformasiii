@@ -10,26 +10,17 @@ use Illuminate\Support\Facades\Auth;
 
 class PilihanDosenController extends Controller
 {
-    public function index()
-    {
-        // ambil semua dosen
-        $dosen = User::where('role', 'dosen')->get();
-
-        // ambil pilihan dosen mahasiswa ini
-        $pilihan = PilihanDosen::where('mahasiswa_id', Auth::user()->id)->first();
-
-        return view('mahasiswa.pilihandosen.index', compact('dosen', 'pilihan'));
-    }
-
-    public function cari(Request $request)
+    public function index(Request $request)
     {
         $query = $request->input('q');
 
         $dosen = User::where('role', 'dosen')
-            ->where('name', 'LIKE', '%' . $query . '%')
+            ->when($query, fn($q) => $q->where('name', 'LIKE', "%$query%"))
             ->get();
 
-        return view('mahasiswa.pilihandosen.index', compact('dosen', 'query'));
+        $pilihan = PilihanDosen::where('mahasiswa_id', Auth::id())->first();
+
+        return view('mahasiswa.pilihandosen.index', compact('dosen', 'pilihan', 'query'));
     }
 
     public function store(Request $request)
@@ -38,20 +29,30 @@ class PilihanDosenController extends Controller
             'dosen_id' => 'required|exists:users,id',
         ]);
 
-        // Cek apakah mahasiswa sudah memilih sebelumnya
-        $cek = PilihanDosen::where('mahasiswa_id', Auth::user()->id)->first();
-
-        if ($cek) {
-            return redirect()->back()->with('error', 'Kamu sudah memilih dosen pembimbing.');
+        // Cek apakah sudah memilih sebelumnya
+        if (PilihanDosen::where('mahasiswa_id', Auth::id())->exists()) {
+            return back()->with('error', 'Kamu sudah memilih dosen pembimbing.');
         }
 
-        // Simpan pilihan dosen
         PilihanDosen::create([
-            'mahasiswa_id' => Auth::user()->id,  // FIX
-            'dosen1_id' => $request->dosen_id,   // FIX
+            'mahasiswa_id' => Auth::id(),
+            'dosen_id' => $request->dosen_id,
             'status' => 'pending',
         ]);
 
-        return redirect()->back()->with('success', 'Dosen pembimbing berhasil dipilih.');
+        return back()->with('success', 'Dosen pembimbing berhasil dipilih.');
+    }
+
+    public function destroy()
+    {
+        $pilihan = PilihanDosen::where('mahasiswa_id', Auth::id())->first();
+
+        if (!$pilihan) {
+            return back()->with('error', 'Tidak ada data pilihan untuk dihapus.');
+        }
+
+        $pilihan->delete();
+
+        return back()->with('success', 'Pilihan dosen berhasil dibatalkan.');
     }
 }

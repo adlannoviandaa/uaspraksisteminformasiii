@@ -3,53 +3,77 @@
 @section('content')
 <div class="container mt-4">
 
-    <h3>Pengaturan akun</h3>
-    <p class="text-muted">Atur Profil dan Preferensi Anda</p>
+    <h3>Pengaturan Akun</h3>
+    <p class="text-muted">Atur profil dan keamanan akun anda</p>
+
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger">{{ session('error') }}</div>
+    @endif
 
     <div class="row mt-4">
 
-        <!-- === PROFIL === -->
-        <div class="col-md-4">
+        <!-- ========== PROFIL ========== -->
+        <div class="col-md-6">
             <div class="card p-3">
                 <h5 class="fw-bold">Profil</h5>
-                <form action="{{ route('mahasiswa.pengaturan.updateProfil') }}" method="POST">
+
+                <form action="{{ route('mahasiswa.pengaturan.index') }}" method="POST">
                     @csrf
-                    <table class="table table-sm mt-3">
-                        <tr><td><strong>Nama</strong></td><td><input name="nama" class="form-control" value="{{ $user->name }}"></td></tr>
-                        <tr><td><strong>NPM</strong></td><td>{{ $user->npm }}</td></tr>
-                        <tr><td><strong>Prodi</strong></td><td>{{ $user->prodi }}</td></tr>
-                        <tr><td><strong>Fakultas</strong></td><td>{{ $user->fakultas }}</td></tr>
-                        <tr><td><strong>Nomor Hp</strong></td><td><input name="no_hp" class="form-control" value="{{ $user->no_hp }}"></td></tr>
-                        <tr><td><strong>Alamat</strong></td><td><textarea name="alamat" class="form-control">{{ $user->alamat }}</textarea></td></tr>
-                    </table>
-                    <button class="btn btn-success w-100">Simpan Perubahan</button>
-                </form>
 
-                <button class="btn btn-outline-danger w-100 mt-2" data-bs-toggle="modal" data-bs-target="#logoutModal">Keluar</button>
+                    <label class="mt-2">Nama</label>
+                    <input name="name" class="form-control" value="{{ $user->name }}">
+
+                    <label class="mt-2">NPM</label>
+                    <input name="npm" class="form-control" value="{{ $user->npm }}" readonly>
+
+                    <label class="mt-2">Program Studi</label>
+                    <input class="form-control" value="{{ $user->prodi }}" readonly>
+
+                    <label class="mt-2">Fakultas</label>
+                    <input class="form-control" value="{{ $user->fakultas }}" readonly>
+
+                    <label class="mt-2">Nomor HP</label>
+                    <input name="no_hp" class="form-control" value="{{ $user->no_hp }}">
+
+                    <label class="mt-2">Alamat</label>
+                    <textarea name="alamat" class="form-control">{{ $user->alamat }}</textarea>
+
+                    <button class="btn btn-success w-100 mt-3">Simpan</button>
+                </form>
             </div>
         </div>
 
-        <!-- === KEAMANAN & PREFERENSI === -->
-        <div class="col-md-8">
 
-            <div class="card p-3 mb-3">
-                <h5>Keamanan</h5>
-                <ul class="list-group mt-2">
-                    <li class="list-group-item">Ubah password</li>
-                    <li class="list-group-item">Autentikasi dua langkah</li>
-                    <li class="list-group-item">Pertanyaan pemulihan</li>
-                </ul>
-            </div>
-
+        <!-- ========== UBAH PASSWORD ========== -->
+        <div class="col-md-6">
             <div class="card p-3">
-                <h5>Tampilan dan preferensi</h5>
+                <h5 class="fw-bold">Keamanan</h5>
 
+                <form action="{{ route('mahasiswa.pengaturan.updatePassword') }}" method="POST">
+                    @csrf
 
+                    <label class="mt-3">Password Lama</label>
+                    <input type="password" name="password_lama" class="form-control">
+
+                    <label class="mt-3">Password Baru</label>
+                    <input type="password" name="password_baru" class="form-control">
+
+                    <label class="mt-3">Konfirmasi Password Baru</label>
+                    <input type="password" name="password_baru_confirmation" class="form-control">
+
+                    <button class="btn btn-primary w-100 mt-3">Ubah Password</button>
                 </form>
-
             </div>
 
+            <button class="btn btn-outline-danger w-100 mt-3" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                Logout
+            </button>
         </div>
+
     </div>
 </div>
 
@@ -57,7 +81,7 @@
 <div class="modal fade" id="logoutModal">
     <div class="modal-dialog">
         <div class="modal-content p-4 text-center">
-            <h5>INGIN KELUAR?</h5>
+            <h5>Yakin keluar?</h5>
             <form action="{{ route('logout') }}" method="POST">
                 @csrf
                 <button class="btn btn-success mt-3 me-2">Ya</button>

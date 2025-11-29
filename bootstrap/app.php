@@ -4,9 +4,9 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
-// IMPORT middleware yang kamu butuhkan
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\RedirectIfAuthenticated;
+use App\Http\Middleware\RoleMiddleware;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -16,10 +16,10 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
 
-        // DAFTAR ALIAS MIDDLEWARE DI SINI
         $middleware->alias([
             'auth' => Authenticate::class,
             'guest' => RedirectIfAuthenticated::class,
+            'role' => RoleMiddleware::class, // << WAJIB
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

@@ -1,93 +1,72 @@
 @extends('layouts.main')
 
 @section('content')
-<div class="container">
 
-    {{-- Notifikasi --}}
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
+<div class="container mt-4">
+    <h3 class="mb-3">Pilihan Dosen Pembimbing</h3>
 
-    @if(session('error'))
-        <div class="alert alert-danger">{{ session('error') }}</div>
-    @endif
-
-    <h3 class="mb-3">Pilih Dosen Pembimbing</h3>
-
-    {{-- Tampilkan dosen yang sudah dipilih --}}
-    @if(isset($pilihan) && $pilihan)
-        <div class="alert alert-info">
-            <b>Kamu sudah memilih dosen pembimbing:</b><br>
-            <span class="text-primary" style="font-size: 18px;">
-                {{ $pilihan->dosen1->name }}
-            </span>
-            <br>
-            <small>Status: <b>{{ ucfirst($pilihan->status) }}</b></small>
+    @if ($pilihan)
+        <!-- Jika mahasiswa sudah memilih -->
+        <div class="alert alert-success">
+            <strong>✔ Kamu sudah memilih dosen!</strong>
         </div>
-    @endif
 
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5>Dosen Terpilih:</h5>
 
-    {{-- Form Pencarian --}}
-    <form action="{{ route('mahasiswa.pilihandosen.cari') }}" method="GET" class="mb-3">
-        <input
-            type="text"
-            name="q"
-            class="form-control"
-            placeholder="Cari dosen..."
-            value="{{ $query ?? '' }}"
-        >
-    </form>
+                <p class="fs-5 fw-bold text-primary">
+                    {{ $pilihan->dosen->name ?? 'Tidak ditemukan' }}
+                </p>
 
-    <table class="table table-bordered">
-        <thead>
-            <tr class="text-center">
-                <th>No</th>
-                <th>Nama Dosen</th>
-                <th>Fakultas</th>
-                <th>Kapasitas</th>
-                <th>Pilih</th>
-            </tr>
-        </thead>
+                <span class="badge
+                    {{ $pilihan->status == 'pending' ? 'bg-warning text-dark' : ($pilihan->status == 'ditolak' ? 'bg-danger' : 'bg-success') }}
+                ">
+                    Status: {{ ucfirst($pilihan->status) }}
+                </span>
 
-        <tbody>
-            @forelse ($dosen as $d)
-            <tr>
-                <td class="text-center">{{ $loop->iteration }}</td>
-                <td>{{ $d->name }}</td>
-                <td>{{ $d->fakultas ?? '-' }}</td>
-                <td>{{ $d->kapasitas ?? '-' }}</td>
+                <div class="mt-3">
+                    <form action="{{ route('mahasiswa.pilihandosen.index') }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-danger btn-sm" onclick="return confirm('Yakin batal pilih dosen?')">
+                            Batalkan Pilihan
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
 
-                <td class="text-center">
-                    {{-- Jika sudah memilih dosen, tombol disable --}}
-                    @if(isset($pilihan) && $pilihan)
-                        @if($pilihan->dosen1_id == $d->id)
-                            <span class="badge bg-success">Dipilih</span>
-                        @else
-                            <button class="btn btn-secondary btn-sm" disabled>
-                                Pilih
-                            </button>
-                        @endif
-                    @else
-                        {{-- Belum memilih --}}
-                        <form action="{{ route('mahasiswa.pilihandosen.store') }}" method="POST">
+    @else
+        <!-- Jika mahasiswa belum memilih -->
+        <div class="alert alert-info">Silakan pilih salah satu dosen pembimbing.</div>
+
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Nama Dosen</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+
+            <tbody>
+               @foreach ($dosen as $d)
+                <tr>
+                    <td>{{ $d->name }}</td>
+                    <td>
+                        <form action="{{ route('mahasiswa.pilihandosen.index') }}" method="POST">
                             @csrf
                             <input type="hidden" name="dosen_id" value="{{ $d->id }}">
                             <button type="submit" class="btn btn-primary btn-sm">
-                                Pilih
+                                Pilih Dosen Ini
                             </button>
                         </form>
-                    @endif
-                </td>
-            </tr>
-            @empty
-            <tr>
-                <td colspan="5" class="text-center text-muted">
-                    Tidak ada dosen ditemukan
-                </td>
-            </tr>
-            @endforelse
-        </tbody>
-    </table>
-
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    @endif
 </div>
+
 @endsection

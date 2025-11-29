@@ -11,11 +11,7 @@ class User extends Authenticatable
     use Notifiable;
 
     protected $fillable = [
-        'name',
-        'nim',
-        'email',
-        'password',
-        'role',
+        'nim', 'name', 'email', 'password', 'role'
     ];
 
     protected $hidden = [
@@ -23,17 +19,19 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    // Supaya login pakai NIM, bukan email
-    public function getAuthIdentifierName()
+    public function username()
     {
         return 'nim';
     }
 
-    // Supaya password otomatis di-hash kalau belum di-hash
-    public function setPasswordAttribute($password)
+    // === HASH PASSWORD OTOMATIS ===
+    public function setPasswordAttribute($value)
     {
-        $this->attributes['password'] = Hash::needsRehash($password)
-            ? Hash::make($password)
-            : $password;
+        // Cegah double-hash
+        if (!empty($value) && strlen($value) < 60) {
+            $this->attributes['password'] = Hash::make($value);
+        } else {
+            $this->attributes['password'] = $value;
+        }
     }
 }
