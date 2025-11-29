@@ -9,9 +9,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('tugas_akhirs', function (Blueprint $table) {
-            if (!Schema::hasColumn('tugas_akhirs', 'dosen_id')) {
-                $table->unsignedBigInteger('dosen_id')->nullable()->after('mahasiswa_id');
-                $table->foreign('dosen_id')->references('id')->on('users')->onDelete('set null');
+            if (!Schema::hasColumn('tugas_akhirs', 'mahasiswa_id')) {
+                $table->unsignedBigInteger('mahasiswa_id')->after('id');
+                $table->foreign('mahasiswa_id')->references('id')->on('users')->onDelete('cascade');
             }
         });
     }
@@ -19,9 +19,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('tugas_akhirs', function (Blueprint $table) {
-            if (Schema::hasColumn('tugas_akhirs', 'dosen_id')) {
-                $table->dropForeign(['dosen_id']);
-                $table->dropColumn('dosen_id');
+            if (Schema::hasColumn('tugas_akhirs', 'mahasiswa_id')) {
+                $table->dropForeign(['mahasiswa_id']);
+                $table->dropColumn('mahasiswa_id');
             }
         });
     }

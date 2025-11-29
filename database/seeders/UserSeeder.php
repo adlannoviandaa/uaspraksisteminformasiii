@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
                 'role' => 'admin',
             ],
             [
-                'nim' => '11111111',
+                'nim' => '11111',
                 'name' => 'Dosen Pembimbing',
                 'email' => 'dosen@sitama.com',
                 'role' => 'dosen',

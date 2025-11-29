@@ -10,13 +10,18 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 
 // Mahasiswa
-use App\Http\Controllers\Mahasiswa\DashboardController;
+use App\Http\Controllers\Mahasiswa\DashboardController as MahasiswaDashboardController;
 use App\Http\Controllers\Mahasiswa\TugasAkhirController;
 use App\Http\Controllers\Mahasiswa\PilihanDosenController;
 use App\Http\Controllers\Mahasiswa\PesanController;
 use App\Http\Controllers\Mahasiswa\MahasiswaProfileController;
 use App\Http\Controllers\Mahasiswa\PengaturanController;
 
+// Dosen
+use App\Http\Controllers\Dosen\DashboardController as DosenDashboardController;
+use App\Http\Controllers\Dosen\TugasAkhirController as DosenTugasAkhirController;
+use App\Http\Controllers\Dosen\PesanController as DosenPesanController;
+use App\Http\Controllers\Dosen\PengaturanController as DosenPengaturanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +29,6 @@ use App\Http\Controllers\Mahasiswa\PengaturanController;
 |--------------------------------------------------------------------------
 */
 Route::get('/', fn() => redirect()->route('login'));
-
 
 /*
 |--------------------------------------------------------------------------
@@ -34,7 +38,6 @@ Route::get('/', fn() => redirect()->route('login'));
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.action');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-
 
 /*
 |--------------------------------------------------------------------------
@@ -47,16 +50,12 @@ Route::middleware(['auth'])
     ->group(function () {
 
         // Dashboard
-        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard', [MahasiswaDashboardController::class, 'index'])->name('dashboard');
 
         // Tugas Akhir CRUD (Resource)
         Route::resource('/tugasakhir', TugasAkhirController::class);
 
-        /*
-        |--------------------------------------------------------------------------
-        | PILIHAN DOSEN
-        |--------------------------------------------------------------------------
-        */
+        // Pilihan Dosen
         Route::prefix('pilihandosen')->name('pilihandosen.')->group(function () {
             Route::get('/', [PilihanDosenController::class, 'index'])->name('index');
             Route::get('/cari', [PilihanDosenController::class, 'cari'])->name('cari');
@@ -67,43 +66,41 @@ Route::middleware(['auth'])
             Route::delete('/{id}', [PilihanDosenController::class, 'destroy'])->name('destroy');
         });
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | PESAN
-        |--------------------------------------------------------------------------
-        */
+        // Pesan
         Route::prefix('pesan')->name('pesan.')->group(function () {
             Route::get('/', [PesanController::class, 'index'])->name('index');
             Route::get('/create', [PesanController::class, 'create'])->name('create');
         });
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | PENGATURAN / SETTINGS
-        |--------------------------------------------------------------------------
-        */
- Route::get('/pengaturan', [PengaturanController::class, 'index'])->name('pengaturan.index');
-Route::post('/pengaturan/update-profil', [PengaturanController::class, 'updateProfil'])->name('pengaturan.updateProfil');
-Route::post('/pengaturan/update-password', [PengaturanController::class, 'updatePassword'])->name('pengaturan.updatePassword');
-
+        // Pengaturan
+        Route::get('/pengaturan', [PengaturanController::class, 'index'])->name('pengaturan.index');
+        Route::post('/pengaturan/update-profil', [PengaturanController::class, 'updateProfil'])->name('pengaturan.updateProfil');
+        Route::post('/pengaturan/update-password', [PengaturanController::class, 'updatePassword'])->name('pengaturan.updatePassword');
     });
-
 
 /*
 |--------------------------------------------------------------------------
-| DOSEN AREA (Coming Soon)
+| DOSEN AREA
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth'])
     ->prefix('dosen')
     ->name('dosen.')
     ->group(function () {
-        Route::get('/dashboard', fn() => "Dashboard Dosen (Coming Soon)")
-            ->name('dashboard');
-    });
+        // Dashboard
+        Route::get('/dashboard', [DosenDashboardController::class, 'index'])->name('dashboard');
 
+        // Tugas Akhir CRUD (Resource)
+        Route::resource('/tugasakhir', DosenTugasAkhirController::class);
+
+        // Pesan CRUD (Resource)
+        Route::resource('/pesan', DosenPesanController::class);
+
+        // Pengaturan
+        Route::get('/pengaturan', [DosenPengaturanController::class, 'index'])->name('pengaturan.index');
+        Route::post('/pengaturan/update-profil', [DosenPengaturanController::class, 'updateProfil'])->name('pengaturan.updateProfil');
+        Route::post('/pengaturan/update-password', [DosenPengaturanController::class, 'updatePassword'])->name('pengaturan.updatePassword');
+    });
 
 /*
 |--------------------------------------------------------------------------
@@ -114,6 +111,5 @@ Route::middleware(['auth'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
-        Route::get('/dashboard', fn() => "Dashboard Admin (Coming Soon)")
-            ->name('dashboard');
+        Route::get('/dashboard', fn() => "Dashboard Admin (Coming Soon)")->name('dashboard');
     });
